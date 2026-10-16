@@ -28,10 +28,13 @@ public class Main {
                     case "4" -> showRooms(roomManager);
                     case "5" -> completeCare(input, roomManager, waitingRoom);
                     case "6" -> {
+                        removeWaitingPatient(input, waitingRoom);
+                    }
+                    case "7" -> {
                         System.out.println("Goodbye.");
                         running = false;
                     }
-                    default -> System.out.println("Please choose an option from 1 to 6.");
+                    default -> System.out.println("Please choose an option from 1 to 7.");
                 }
                 System.out.println();
             }
@@ -46,7 +49,8 @@ public class Main {
         System.out.println("3. List waiting patients");
         System.out.println("4. View treatment rooms");
         System.out.println("5. Mark a room patient's care complete");
-        System.out.println("6. Exit");
+        System.out.println("6. Remove a patient from the waiting queue");
+        System.out.println("7. Exit");
         System.out.print("Choose an option: ");
     }
 
@@ -132,6 +136,26 @@ public class Main {
             }
         } catch (IllegalArgumentException exception) {
             System.out.println("Enter a valid room number from 1 to " + roomManager.getRoomCount() + ".");
+        }
+    }
+
+    private static void removeWaitingPatient(Scanner input, PatientPriorityQueue waitingQueue) {
+        if (waitingQueue.isEmpty()) {
+            System.out.println("There are no patients waiting to remove.");
+            return;
+        }
+        listPatients(waitingQueue);
+        System.out.print("Enter the patient ID to remove from the waiting queue: ");
+        try {
+            long patientId = Long.parseLong(input.nextLine().trim());
+            Patient removed = waitingQueue.removeByArrivalOrder(patientId);
+            if (removed == null) {
+                System.out.println("No waiting patient has that ID.");
+            } else {
+                System.out.println("Removed from the waiting queue: " + removed);
+            }
+        } catch (NumberFormatException exception) {
+            System.out.println("Enter a valid whole-number patient ID.");
         }
     }
 

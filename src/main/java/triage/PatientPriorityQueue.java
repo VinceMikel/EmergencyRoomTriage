@@ -43,6 +43,32 @@ public class PatientPriorityQueue {
         return next;
     }
 
+    /** Removes a waiting patient. */
+    public Patient removeByArrivalOrder(long arrivalOrder) {
+        int index = -1;
+        for (int i = 0; i < heap.size(); i++) {
+            if (heap.get(i).getArrivalOrder() == arrivalOrder) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            return null;
+        }
+
+        Patient removed = heap.get(index);
+        Patient last = heap.remove(heap.size() - 1);
+        if (index < heap.size()) {
+            heap.set(index, last);
+            if (index > 0 && ORDER.compare(heap.get(index), heap.get((index - 1) / 2)) < 0) {
+                siftUp(index);
+            } else {
+                siftDown(index);
+            }
+        }
+        return removed;
+    }
+
     public int size() {
         return heap.size();
     }

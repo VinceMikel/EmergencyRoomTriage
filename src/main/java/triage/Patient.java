@@ -45,6 +45,6 @@ public class Patient {
 
     @Override
     public String toString() {
-        return String.format("%s | %s | urgency %d", name, condition, urgencyLevel);
+        return String.format("ID %d | %s | %s | urgency %d", arrivalOrder, name, condition, urgencyLevel);
     }
 }
